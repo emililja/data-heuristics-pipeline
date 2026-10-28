@@ -1,0 +1,5 @@
+{
+  "$schema": "https://antigravity.google/schemas/v1/plugin.json",
+  "name": "data-analytics-verification",
+  "description": "Step-by-step data analytics, exploratory data analysis (EDA), and transformation toolkit with terminal print verification and saved visual artifacts."
+}
