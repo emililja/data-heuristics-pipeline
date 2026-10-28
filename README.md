@@ -17,11 +17,16 @@ data-heuristics-pipeline/
 ├── agents/
 │   └── data-scientist.md                              # Dedicated analytical auditor subagent
 └── skills/
-    └── data-analytics-verification/
+    ├── data-analytics-verification/                   # Skill: Tabular EDA & clean transformations
+    │   ├── SKILL.md                                   # On-demand procedural guide (Python & R)
+    │   └── scripts/
+    │       ├── verifier.py                            # Standalone Python verification helper
+    │       └── verifier.R                             # Standalone R verification helper
+    └── dimensionality-reduction-clustering/           # Skill: PCA & K-Means clustering verification
         ├── SKILL.md                                   # On-demand procedural guide (Python & R)
         └── scripts/
-            ├── verifier.py                            # Standalone Python verification helper
-            └── verifier.R                             # Standalone R verification helper
+            ├── dim_reduction_cluster.py               # Standalone Python module (PCA + K-Means)
+            └── dim_reduction_cluster.R                # Standalone R module (PCA + K-Means)
 ```
 
 ---
@@ -157,6 +162,39 @@ print_ascii_histogram(cleaned_df$total_price, label = "Order Total")
 
 # 5. Save Visual
 save_eda_figure(cleaned_df, column_name = "total_price", output_directory = "output")
+```
+
+### Running the Dimensionality Reduction & Clustering Module
+
+#### Python
+```bash
+python skills/dimensionality-reduction-clustering/scripts/dim_reduction_cluster.py
+```
+Or import into your pipeline:
+```python
+from skills.dimensionality_reduction_clustering.scripts.dim_reduction_cluster import (
+    standardize_features,
+    compute_pca_decomposition,
+    fit_kmeans_partition,
+    save_clustering_visuals,
+)
+
+# 1. Standardize features and assert mean=0, std=1
+scaled_df, scaler = standardize_features(df, feature_columns=["f1", "f2", "f3", "f4"])
+
+# 2. PCA decomposition with variance conservation check
+pca_model, projected_df, cutoff = compute_pca_decomposition(scaled_df, variance_threshold=0.80)
+
+# 3. K-Means clustering with partition completeness check
+kmeans_model, cluster_labels, silhouette = fit_kmeans_partition(projected_df[["PC1", "PC2"]], cluster_count=3)
+
+# 4. Save visual dashboard (Scree plot + 2D PCA cluster projection)
+save_clustering_visuals(pca_model, projected_df, cluster_labels, output_directory="output")
+```
+
+#### R
+```bash
+Rscript skills/dimensionality-reduction-clustering/scripts/dim_reduction_cluster.R
 ```
 
 ---
