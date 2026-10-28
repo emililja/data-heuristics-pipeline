@@ -27,11 +27,21 @@ data-heuristics-pipeline/
     │   └── scripts/
     │       ├── dim_reduction_cluster.py               # Standalone Python module (PCA + K-Means)
     │       └── dim_reduction_cluster.R                # Standalone R module (PCA + K-Means)
-    └── supervised-ml-verification/                    # Skill: Classification & Regression validation
+    ├── supervised-ml-verification/                    # Skill: Classification & Regression validation
+    │   ├── SKILL.md                                   # On-demand procedural guide (Python & R)
+    │   └── scripts/
+    │       ├── supervised_ml.py                       # Standalone Python module (Leakage & Baselines)
+    │       └── supervised_ml.R                        # Standalone R module (Leakage & Baselines)
+    ├── exact-lp-milp-verification/                    # Skill: Linear & Mixed-Integer Programming
+    │   ├── SKILL.md                                   # On-demand procedural guide (Python & R)
+    │   └── scripts/
+    │       ├── lp_milp_solver.py                      # Standalone Python module (HiGHS Slack Audit)
+    │       └── lp_milp_solver.R                       # Standalone R module (Slack Audit)
+    └── metaheuristics-optimization-verification/      # Skill: Genetic Algorithms & Simulated Annealing
         ├── SKILL.md                                   # On-demand procedural guide (Python & R)
         └── scripts/
-            ├── supervised_ml.py                       # Standalone Python module (Leakage & Baselines)
-            └── supervised_ml.R                        # Standalone R module (Leakage & Baselines)
+            ├── metaheuristics_engine.py               # Standalone Python module (Convergence & Diversity)
+            └── metaheuristics_engine.R                # Standalone R module (Convergence & Diversity)
 ```
 
 ---
@@ -235,6 +245,79 @@ save_classification_plots(y_test, y_pred, y_prob, output_directory="output")
 #### R
 ```bash
 Rscript skills/supervised-ml-verification/scripts/supervised_ml.R
+```
+
+### Running the Exact LP / MILP Verification Module
+
+#### Python
+```bash
+python skills/exact-lp-milp-verification/scripts/lp_milp_solver.py
+```
+Or import into your optimization script:
+```python
+from skills.exact_lp_milp_verification.scripts.lp_milp_solver import (
+    solve_and_verify_milp,
+    save_slack_margin_figure,
+)
+
+# Solve problem, verify optimality and assert slack feasibility
+x_opt, opt_val, audit_df = solve_and_verify_milp(
+    c=c_costs,
+    A_ub=A_constraints,
+    b_ub=b_limits,
+    integrality=int_mask,
+    variable_names=["var_1", "var_2"],
+    constraint_names=["budget", "capacity"],
+)
+
+# Save slack margin bar chart (highlighting active bottlenecks in orange)
+save_slack_margin_figure(audit_df, output_directory="output", filename_prefix="project_milp")
+```
+
+#### R
+```bash
+Rscript skills/exact-lp-milp-verification/scripts/lp_milp_solver.R
+```
+
+### Running the Modular Metaheuristics Verification Module
+
+#### Python
+```bash
+python skills/metaheuristics-optimization-verification/scripts/metaheuristics_engine.py
+```
+Or import into your optimization pipeline:
+```python
+from skills.metaheuristics_optimization_verification.scripts.metaheuristics_engine import (
+    run_simulated_annealing,
+    run_genetic_algorithm,
+    save_metaheuristic_dashboard,
+)
+
+# 1. Simulated Annealing with cooling validation & monotonic best check
+best_state, best_energy, sa_history = run_simulated_annealing(
+    objective_function=cost_func,
+    initial_state=init_solution,
+    neighbor_generator=neighbor_func,
+    initial_temperature=100.0,
+    cooling_rate=0.95,
+)
+
+# 2. Genetic Algorithm with spatial diversity & stagnation tracking
+best_ind, best_fit, ga_history = run_genetic_algorithm(
+    objective_function=cost_func,
+    dimension=8,
+    population_size=50,
+    generations=100,
+    patience=15,
+)
+
+# 3. Save dual-panel diagnostic dashboard (Convergence + Diversity Decay)
+save_metaheuristic_dashboard(ga_history, output_directory="output", filename_prefix="ga_run")
+```
+
+#### R
+```bash
+Rscript skills/metaheuristics-optimization-verification/scripts/metaheuristics_engine.R
 ```
 
 ---
