@@ -22,11 +22,16 @@ data-heuristics-pipeline/
     │   └── scripts/
     │       ├── verifier.py                            # Standalone Python verification helper
     │       └── verifier.R                             # Standalone R verification helper
-    └── dimensionality-reduction-clustering/           # Skill: PCA & K-Means clustering verification
+    ├── dimensionality-reduction-clustering/           # Skill: PCA & K-Means clustering verification
+    │   ├── SKILL.md                                   # On-demand procedural guide (Python & R)
+    │   └── scripts/
+    │       ├── dim_reduction_cluster.py               # Standalone Python module (PCA + K-Means)
+    │       └── dim_reduction_cluster.R                # Standalone R module (PCA + K-Means)
+    └── supervised-ml-verification/                    # Skill: Classification & Regression validation
         ├── SKILL.md                                   # On-demand procedural guide (Python & R)
         └── scripts/
-            ├── dim_reduction_cluster.py               # Standalone Python module (PCA + K-Means)
-            └── dim_reduction_cluster.R                # Standalone R module (PCA + K-Means)
+            ├── supervised_ml.py                       # Standalone Python module (Leakage & Baselines)
+            └── supervised_ml.R                        # Standalone R module (Leakage & Baselines)
 ```
 
 ---
@@ -195,6 +200,41 @@ save_clustering_visuals(pca_model, projected_df, cluster_labels, output_director
 #### R
 ```bash
 Rscript skills/dimensionality-reduction-clustering/scripts/dim_reduction_cluster.R
+```
+
+### Running the Supervised ML Verification Module
+
+#### Python
+```bash
+python skills/supervised-ml-verification/scripts/supervised_ml.py
+```
+Or import into your pipeline:
+```python
+from skills.supervised_ml_verification.scripts.supervised_ml import (
+    split_and_scale_features,
+    verify_classification_model,
+    verify_regression_model,
+    save_classification_plots,
+    save_regression_plots,
+)
+
+# 1. Zero-leakage train/test split with scaler fit strictly on train
+X_train, X_test, y_train, y_test, scaler = split_and_scale_features(
+    features_df, target_series, is_classification=True, test_ratio=0.25
+)
+
+# 2. Train model and assert superiority over Dummy baseline
+y_pred, y_prob = verify_classification_model(
+    model, X_train, y_train, X_test, y_test
+)
+
+# 3. Save diagnostic visualizations (Confusion Matrix + ROC curve)
+save_classification_plots(y_test, y_pred, y_prob, output_directory="output")
+```
+
+#### R
+```bash
+Rscript skills/supervised-ml-verification/scripts/supervised_ml.R
 ```
 
 ---
