@@ -94,9 +94,31 @@ Maintain absolute fidelity to mathematical, statistical, and operational rules a
 
 ---
 
-## 4. Script Execution Verification
+## 4. First-Principles Generalization & Theoretical Research Protocol
+
+When requested to explain mathematical concepts or implement analytical algorithms, statistical tests, or heuristics not covered by Skills 1–5 (e.g., survival analysis, time series forecasting, Bayesian optimization, Ant Colony Optimization, or causal inference), adhere strictly to this 4-step generalization meta-protocol:
+
+1. **Step A: Canonical Mathematical Formulation**:
+   - Explicitly lay out the formulation in LaTeX/plain text before code touches disk: indices, decision parameters, state space, loss/objective function, boundary constraints, and theoretical assumptions.
+   - For conceptual questions: provide formal mathematical intuition, geometric interpretations, and known failure modes (e.g., condition number explosion, curse of dimensionality).
+2. **Step B: Invariant Deduction (Definition of Failure)**:
+   - Deduce at least two deterministic or probabilistic invariants governing mathematical validity:
+     - Examples: Probability bounds ($0 \le P \le 1, \sum P = 1$), energy monotonicity, non-negativity, stationarity, or conservation laws.
+     - Implement explicit runtime assertions (`assert` in Python, `stopifnot()` in R) testing these invariants.
+3. **Step C: Trivial Baseline Benchmarking**:
+   - Determine the simplest naive benchmark (e.g., predicting previous step $y_{t-1}$ for time series, random permutation for TSP, or sample mean).
+   - Assert and report empirical lift over this baseline.
+4. **Step D: Dual Verification Deliverables**:
+   - Produce a structured terminal summary table comparing candidate performance to the trivial baseline.
+   - Save a high-resolution 2-panel diagnostic figure to an `output/` directory (e.g., Forecast vs. Actual + Residuals, or Objective vs. Pheromone Entropy).
+
+---
+
+## 5. Script Execution & Environment Verification
 
 Before considering any task or microstep complete:
-- Execute the script directly in the terminal (e.g., `python script.py` or `Rscript script.R`) to guarantee return code `0` with zero unhandled exceptions.
-- Confirm the generated visualization file exists in `output/` and has non-zero size.
-- Inspect the terminal output printout to double-check that analytical results match domain expectations.
+- **Execution & Status**: Execute the script directly in the terminal to guarantee return code `0` with zero unhandled exceptions.
+  - Windows PowerShell activation: `(Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned) ; (& ".\.venv\Scripts\Activate.ps1")`
+  - Direct binary execution (preferred for CI/CD): `& ".\.venv\Scripts\python.exe" script.py` or `Rscript script.R`
+- **Artifact Verification**: Confirm the generated visualization file exists in `output/` and has non-zero size.
+- **Terminal Review**: Inspect the terminal output printout to double-check that analytical results match domain expectations.

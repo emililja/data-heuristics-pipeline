@@ -37,11 +37,13 @@ data-heuristics-pipeline/
     │   └── scripts/
     │       ├── lp_milp_solver.py                      # Standalone Python module (HiGHS Slack Audit)
     │       └── lp_milp_solver.R                       # Standalone R module (Slack Audit)
-    └── metaheuristics-optimization-verification/      # Skill: Genetic Algorithms & Simulated Annealing
+    ├── metaheuristics-optimization-verification/      # Skill: Genetic Algorithms & Simulated Annealing
         ├── SKILL.md                                   # On-demand procedural guide (Python & R)
         └── scripts/
             ├── metaheuristics_engine.py               # Standalone Python module (Convergence & Diversity)
             └── metaheuristics_engine.R                # Standalone R module (Convergence & Diversity)
+    └── mathematical-research-formulation/             # Skill: Deep math research & first-principles synthesis
+        └── SKILL.md                                   # Runbook for theoretical inquiries & novel algorithms
 ```
 
 ---
@@ -319,6 +321,17 @@ save_metaheuristic_dashboard(ga_history, output_directory="output", filename_pre
 ```bash
 Rscript skills/metaheuristics-optimization-verification/scripts/metaheuristics_engine.R
 ```
+
+### Researching Novel Concepts & First-Principles Synthesis
+
+When the user asks theoretical questions (derivations, convergence proofs, matrix properties) or requests techniques beyond Skills 1–5 (e.g., Time-Series ARIMA, Survival Analysis, Bayesian Optimization, Ant Colony Optimization):
+- **Canonical Math**: Explicitly state indices, parameter spaces, loss functions, and domain assumptions.
+- **Invariant Deduction**: Formulate at least two mathematical rules testing code correctness (probability bounds, non-negative slacks, energy monotonicity).
+- **Trivial Baseline Benchmark**: Compare empirical performance against a zero-knowledge naive heuristic (e.g., lag-1 persistence, sample mean, or random sampling) and report quantitative lift.
+- **Dual Verification**: Persist terminal double-check metrics and save a 2-panel diagnostic figure in `output/`.
+
+See [`skills/mathematical-research-formulation/SKILL.md`](./skills/mathematical-research-formulation/SKILL.md) for full procedural runbooks and polyglot templates.
+
 
 ---
 
